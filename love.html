@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil Hubungan Kami</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Pacifico', cursive;
+      background-color: #fffafc;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+      text-align: center;
+    }
+
+    h1 {
+      color: #c71585;
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 20px;
+      color: #333;
+      white-space: pre-line;
+      margin-top: 20px;
+    }
+
+    .slideshow img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 20px;
+      transition: opacity 1s ease-in-out;
+    }
+
+    audio {
+      margin-top: 20px;
+      width: 100%;
+      display: none;
+    }
+
+    #play-button {
+      margin-top: 15px;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: none;
+    }
+
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 1.5s ease-in forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .heart {
+      color: #e60073;
+      font-size: 36px;
+      animation: beat 1s infinite;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+  </style>
+</head>
+<body>
+  <h1 class="fade-in">💑 Tentang Kami</h1>
+
+  <!-- Hati berdetak -->
+  <div class="heart">❤️</div>
+
+  <!-- Slideshow Foto -->
+  <div class="slideshow fade-in">
+    <img id="slide-image" src="{{ url_for('static', filename='img/foto1.jpg') }}" alt="Foto Kami" />
+  </div>
+
+  <!-- Audio romantis -->
+  <audio id="bg-music" loop>
+    <source src="{{ url_for('static', filename='audio/sweet_song.mp3') }}" type="audio/mpeg" />
+    Browser tidak mendukung audio.
+  </audio>
+
+  <!-- Tombol fallback -->
+  <button id="play-button" onclick="document.getElementById('bg-music').play(); this.style.display='none';">
+    Putar Musik 🎵
+  </button>
+
+  <!-- Pesan -->
+  <p class="fade-in">{{ message }}</p>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const music = document.getElementById("bg-music");
+      const playBtn = document.getElementById("play-button");
+
+      // Autoplay musik dengan fallback tombol
+      music.play().catch(() => {
+        playBtn.style.display = 'inline-block';
+        console.log("Autoplay diblokir. Menunggu interaksi pengguna...");
+      });
+
+      // Slideshow logic
+      const slideImg = document.getElementById("slide-image");
+      const images = [
+        "{{ url_for('static', filename='img/foto1.jpg') }}",
+        "{{ url_for('static', filename='img/foto2.jpg') }}",
+        "{{ url_for('static', filename='img/foto3.jpg') }}"
+      ];
+      let index = 0;
+
+      setInterval(() => {
+        index = (index + 1) % images.length;
+        slideImg.style.opacity = 0;
+        setTimeout(() => {
+          slideImg.src = images[index];
+          slideImg.style.opacity = 1;
+        }, 300);
+      }, 3000); // Ganti setiap 3 detik
+    });
+  </script>
+</body>
+</html>
